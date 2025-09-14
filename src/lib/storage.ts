@@ -30,9 +30,10 @@ export interface AdminUser {
   createdAt: string;
 }
 
-// Initialize storage in localStorage if not exists
+// Initialize storage in localStorage if not exists (noop on server)
 const initializeStorage = () => {
-  if (typeof window !== 'undefined') {
+  if (typeof window === 'undefined') return;
+  try {
     if (!localStorage.getItem('courses')) {
       localStorage.setItem('courses', JSON.stringify([]));
     }
@@ -42,6 +43,8 @@ const initializeStorage = () => {
     if (!localStorage.getItem('adminUsers')) {
       localStorage.setItem('adminUsers', JSON.stringify([]));
     }
+  } catch (_err) {
+    // Ignore storage errors on restricted environments
   }
 };
 
@@ -49,7 +52,11 @@ const initializeStorage = () => {
 export const getCourses = (): Course[] => {
   if (typeof window === 'undefined') return [];
   initializeStorage();
-  return JSON.parse(localStorage.getItem('courses') || '[]');
+  try {
+    return JSON.parse(localStorage.getItem('courses') || '[]');
+  } catch (_err) {
+    return [];
+  }
 };
 
 // Get a single course by ID
@@ -123,7 +130,11 @@ export const toggleCourseStatus = (id: string): boolean => {
 export const getChannelMembers = (): ChannelMember[] => {
   if (typeof window === 'undefined') return [];
   initializeStorage();
-  return JSON.parse(localStorage.getItem('channelMembers') || '[]');
+  try {
+    return JSON.parse(localStorage.getItem('channelMembers') || '[]');
+  } catch (_err) {
+    return [];
+  }
 };
 
 export const addChannelMember = (member: Omit<ChannelMember, 'joinedAt'>): ChannelMember => {
@@ -154,7 +165,11 @@ export const isChannelMember = (userId: string): boolean => {
 export const getAdminUsers = (): AdminUser[] => {
   if (typeof window === 'undefined') return [];
   initializeStorage();
-  return JSON.parse(localStorage.getItem('adminUsers') || '[]');
+  try {
+    return JSON.parse(localStorage.getItem('adminUsers') || '[]');
+  } catch (_err) {
+    return [];
+  }
 };
 
 export const addAdminUser = (user: Omit<AdminUser, 'createdAt' | 'isActive'>): AdminUser => {
