@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
+  "env": {
+    "NEXT_PUBLIC_SITE_URL": "@next_public_site_url",
+    "NEXT_PUBLIC_BOT_USERNAME": "@next_public_bot_username",
+    "NEXT_PUBLIC_API_URL": "@next_public_api_url",
+    "CHANNEL_CHAT_ID": "@channel_chat_id",
+    "CHANNEL_INVITE_LINK": "@channel_invite_link",
+    "BOT_TOKEN": "@bot_token",
+    "JWT_SECRET": "@jwt_secret",
+    "ADMIN_KEY": "@admin_key",
+    "ADMIN_USER_IDS": "@admin_user_ids",
+    "DATABASE_URL": "@database_url"
+  }
+}
