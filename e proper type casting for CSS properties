@@ -1,0 +1,36 @@
+[1mdiff --git a/src/components/ProtectedContent.tsx b/src/components/ProtectedContent.tsx[m
+[1mindex 69958c4..53d7c85 100644[m
+[1m--- a/src/components/ProtectedContent.tsx[m
+[1m+++ b/src/components/ProtectedContent.tsx[m
+[36m@@ -77,10 +77,11 @@[m [mexport default function ProtectedContent({[m
+     document.addEventListener('beforeprint', handleBeforePrint);[m
+ [m
+     // Disable text selection via CSS[m
+[31m-    document.body.style.userSelect = 'none';[m
+[31m-    (document.body.style as any).webkitUserSelect = 'none';[m
+[31m-    (document.body.style as any).mozUserSelect = 'none';[m
+[31m-    (document.body.style as any).msUserSelect = 'none';[m
+[32m+[m[32m    const bodyStyle = document.body.style as any;[m
+[32m+[m[32m    bodyStyle.userSelect = 'none';[m
+[32m+[m[32m    bodyStyle.webkitUserSelect = 'none';[m
+[32m+[m[32m    bodyStyle.mozUserSelect = 'none';[m
+[32m+[m[32m    bodyStyle.msUserSelect = 'none';[m
+ [m
+     // Clean up[m
+     return () => {[m
+[36m@@ -92,10 +93,11 @@[m [mexport default function ProtectedContent({[m
+       document.removeEventListener('beforeprint', handleBeforePrint);[m
+       [m
+       // Re-enable text selection[m
+[31m-      document.body.style.userSelect = '';[m
+[31m-      (document.body.style as any).webkitUserSelect = '';[m
+[31m-      (document.body.style as any).mozUserSelect = '';[m
+[31m-      (document.body.style as any).msUserSelect = '';[m
+[32m+[m[32m      const bodyStyle = document.body.style as any;[m
+[32m+[m[32m      bodyStyle.userSelect = '';[m
+[32m+[m[32m      bodyStyle.webkitUserSelect = '';[m
+[32m+[m[32m      bodyStyle.mozUserSelect = '';[m
+[32m+[m[32m      bodyStyle.msUserSelect = '';[m
+     };[m
+   }, []);[m
+ [m
