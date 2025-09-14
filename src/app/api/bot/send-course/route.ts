@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getCourseById } from '@/lib/storage';
+import { supabase } from '@/lib/supabase';
 import { sendCourseToChannel, generateCourseUrl } from '@/lib/bot';
 
 // POST /api/bot/send-course - Send course to Telegram channel
@@ -16,15 +16,19 @@ export async function POST(request: Request) {
     }
 
     // Get course
-    const course = getCourseById(courseId);
-    if (!course) {
+    const { data: course, error } = await supabase
+      .from('courses')
+      .select('*')
+      .eq('id', courseId)
+      .single();
+    if (error || !course) {
       return NextResponse.json(
         { error: 'Course not found' },
         { status: 404 }
       );
     }
 
-    if (!course.isActive) {
+    if (course.status !== 'active') {
       return NextResponse.json(
         { error: 'Course is not active' },
         { status: 400 }

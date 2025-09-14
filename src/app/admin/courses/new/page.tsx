@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { createCourse } from '@/lib/storage';
+import { COURSE_SUBJECTS } from '@/lib/supabase';
 import { useTelegramWebApp } from '@/hooks/useTelegramWebApp';
 import CourseEditor from '@/components/CourseEditor';
 import toast from 'react-hot-toast';
@@ -13,6 +14,7 @@ import toast from 'react-hot-toast';
 const courseSchema = z.object({
   title: z.string().min(1, 'Title is required').max(200, 'Title must be less than 200 characters'),
   content: z.string().min(1, 'Content is required'),
+  subject: z.enum(['English','Amharic','Civic','Math','Science'], { required_error: 'Subject is required' }),
 });
 
 type CourseFormData = z.infer<typeof courseSchema>;
@@ -34,6 +36,7 @@ export default function NewCourse() {
     defaultValues: {
       title: '',
       content: '',
+      subject: 'English',
     },
   });
 
@@ -64,6 +67,7 @@ export default function NewCourse() {
       const newCourse = createCourse({
         title: data.title,
         content: data.content,
+        subject: data.subject as any,
         images: [], // Extract images from content if needed
         authorId: user?.id?.toString() || 'dev-admin',
         authorName: user?.first_name || 'Dev Admin',
@@ -137,6 +141,23 @@ export default function NewCourse() {
           />
           {errors.title && (
             <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
+          )}
+        </div>
+
+        {/* Subject */}
+        <div>
+          <label className="form-label">Subject *</label>
+          <select
+            {...register('subject')}
+            className={`form-input ${errors.subject ? 'border-red-500' : ''}`}
+            disabled={isSubmitting}
+          >
+            {COURSE_SUBJECTS.map((s) => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+          </select>
+          {errors.subject && (
+            <p className="mt-1 text-sm text-red-600">{errors.subject.message}</p>
           )}
         </div>
 

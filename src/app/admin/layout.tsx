@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTelegramWebApp } from '@/hooks/useTelegramWebApp';
-import { isAdminUser } from '@/lib/storage';
 import Link from 'next/link';
 
 export default function AdminLayout({
@@ -17,26 +16,23 @@ export default function AdminLayout({
   const { user, setupBackButton } = useTelegramWebApp();
 
   useEffect(() => {
-    if (user) {
-      const adminCheck = isAdminUser(user.id.toString());
-      if (adminCheck) {
-        setIsAuthorized(true);
-        setupBackButton(() => router.push('/'));
-      } else {
-        router.push('/');
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/me', { cache: 'no-store' });
+        if (res.ok) {
+          setIsAuthorized(true);
+          setupBackButton(() => router.push('/'));
+        } else {
+          router.push('/admin/login');
+        }
+      } catch {
+        router.push('/admin/login');
+      } finally {
+        setIsLoading(false);
       }
-    } else {
-      // For development/testing in browser, allow access if no user data
-      // In production, this should be restricted to Telegram WebApp only
-      if (process.env.NODE_ENV === 'development') {
-        setIsAuthorized(true);
-        console.log('Development mode: Admin access granted without Telegram user data');
-      } else {
-        router.push('/');
-      }
-    }
-    setIsLoading(false);
-  }, [user, router, setupBackButton]);
+    };
+    checkAuth();
+  }, [router, setupBackButton]);
 
   if (isLoading) {
     return (
@@ -79,6 +75,12 @@ export default function AdminLayout({
                 className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
               >
                 Courses
+              </Link>
+              <Link
+                href="/admin/settings"
+                className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                Settings
               </Link>
               <Link
                 href="/admin/courses/new"
