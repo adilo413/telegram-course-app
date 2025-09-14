@@ -78,9 +78,9 @@ export default function ProtectedContent({
 
     // Disable text selection via CSS
     document.body.style.userSelect = 'none';
-    document.body.style.webkitUserSelect = 'none';
-    document.body.style.mozUserSelect = 'none';
-    document.body.style.msUserSelect = 'none';
+    (document.body.style as any).webkitUserSelect = 'none';
+    (document.body.style as any).mozUserSelect = 'none';
+    (document.body.style as any).msUserSelect = 'none';
 
     // Clean up
     return () => {
@@ -93,9 +93,9 @@ export default function ProtectedContent({
       
       // Re-enable text selection
       document.body.style.userSelect = '';
-      document.body.style.webkitUserSelect = '';
-      document.body.style.mozUserSelect = '';
-      document.body.style.msUserSelect = '';
+      (document.body.style as any).webkitUserSelect = '';
+      (document.body.style as any).mozUserSelect = '';
+      (document.body.style as any).msUserSelect = '';
     };
   }, []);
 
