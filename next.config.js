@@ -29,10 +29,6 @@ const nextConfig = {
     NEXT_PUBLIC_CHANNEL_INVITE_LINK: process.env.CHANNEL_INVITE_LINK,
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   },
-  // Enable experimental features for better performance
-  experimental: {
-    optimizeCss: true,
-  },
   // Configure for Vercel deployment
   trailingSlash: false,
   poweredByHeader: false,

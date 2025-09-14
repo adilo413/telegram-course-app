@@ -34,6 +34,7 @@
     "multer": "^2.0.0-rc.4",
     "sharp": "^0.33.0",
     "@tailwindcss/typography": "^0.5.10",
+    "critters": "^0.0.22",
     "@supabase/supabase-js": "^2.38.0",
     "bcryptjs": "^2.4.3"
   },
