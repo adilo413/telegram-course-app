@@ -131,7 +131,7 @@ export default function ProtectedContent({
           msUserSelect: 'none',
           WebkitTouchCallout: 'none',
           WebkitTapHighlightColor: 'transparent',
-        }}
+        } as React.CSSProperties}
       >
         {children}
       </div>
