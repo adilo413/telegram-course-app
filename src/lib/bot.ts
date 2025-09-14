@@ -149,7 +149,7 @@ export function validateTelegramWebAppData(initData: string, botToken: string): 
     // 4. Check the auth_date is not too old
     
     // For development, just check if initData exists
-    return initData && initData.length > 0;
+    return typeof initData === 'string' && initData.length > 0;
   } catch (error) {
     console.error('Error validating Telegram WebApp data:', error);
     return false;
